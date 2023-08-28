@@ -1,0 +1,85 @@
+.cont{
+  margin: 0px 0px 0px 100px;
+}
+
+.error {
+ border: 1px solid red;
+}
+
+.header {
+  /*background-color: darkcyan;*/
+  color: #336699;
+  /*text-align: center;*/
+}
+
+.field {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+  width: 50%;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.field input {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.field select {
+  width: 100%;
+  padding: 5px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.field button {
+  background-color: #e81c1c;
+  color: whitesmoke;
+  border-radius: 3px;
+  font-size: medium;
+  border: none;
+  width: 70px;
+  height: 20px;
+}
+
+.addfield {
+  font-size: large;
+  width: 120px;
+  height: 30px;
+  color: whitesmoke;
+  background-color: green;
+  border-radius: 3px;
+  border: none;
+}
+
+.submit {
+  font-size: large;
+  color: whitesmoke;
+  cursor: pointer;
+  width: 300px;
+  height: 40px;
+  border-radius: 3px;
+  border: none;
+}
+
+.submit:enabled {
+  background-color: #336699; /* Apply your enabled style here */
+}
+
+.submit:disabled {
+  background-color: #ccc; /* Apply your disabled style here */
+  cursor: not-allowed;
+}
+

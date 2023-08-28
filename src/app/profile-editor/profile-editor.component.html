@@ -1,0 +1,189 @@
+<div class="container mt-4">
+  <h1 class="text-center">Basic Information</h1>
+  <p>Form Status: {{ profileForm.status }}</p>
+  <p>{{JSON.stringify(this.profileForm.value)}}</p>
+<form [formGroup]="profileForm">
+
+  <div class="field">
+  <label class="data" for="first-name">First Name: </label>
+  <input id="first-name" type="text" placeholder="First Name" formControlName="firstName" (keypress)="nameValidator($event)" (input)="handleInput($event)" minlength="1" maxlength="25">
+<!--    <div *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.errors?.['required']">-->
+<!--      First Name is required!-->
+<!--    </div>-->
+<!--    <div *ngIf="profileForm.get('firstName')?.value && profileForm.get('firstName')!.errors">-->
+<!--      Numbers and Special characters not allowed!-->
+<!--    </div>-->
+    <div *ngIf="getControl('firstName')?.errors && getControl('firstName')?.touched">
+      <small class="text-danger" *ngIf="getControl('firstName')?.errors?.['required']">First name is required</small>
+      <small class="text-danger" *ngIf="getControl('firstName')?.errors?.['maxLength']">Only 25 characters are allowed</small>
+    </div>
+  </div>
+
+<!--  <div class="mb-3">-->
+<!--    <label class="form-label" for="first-name">First Name: </label>-->
+<!--    <input id="first-name" class="form-control" type="text" placeholder="First Name" formControlName="firstName" (keypress)="nameValidator($event)" (input)="handleInput($event)" minlength="1" maxlength="25">-->
+<!--    &lt;!&ndash;    <div *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.errors?.['required']">&ndash;&gt;-->
+<!--    &lt;!&ndash;      First Name is required!&ndash;&gt;-->
+<!--    &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--    &lt;!&ndash;    <div *ngIf="profileForm.get('firstName')?.value && profileForm.get('firstName')!.errors">&ndash;&gt;-->
+<!--    &lt;!&ndash;      Numbers and Special characters not allowed!&ndash;&gt;-->
+<!--    &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--    <div *ngIf="getControl('firstName')?.errors && getControl('firstName')?.touched">-->
+<!--      <small class="text-danger" *ngIf="getControl('firstName')?.errors?.['required']">First name is required</small>-->
+<!--      <small class="text-danger" *ngIf="getControl('firstName')?.errors?.['maxLength']">Only 25 characters are allowed</small>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <div class="field">
+  <label class="data" for="last-name">Last Name: </label>
+  <input id="last-name" type="text" formControlName="lastName" placeholder="Last Name" (keypress)="nameValidator($event)" minlength="1" maxlength="25" [ngClass]="{error : getControl('lastName')?.errors && getControl('lastName')?.touched}">
+<!--    <div *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.errors?.['required']">-->
+<!--      Last Name is required!-->
+<!--    </div>-->
+<!--    <div *ngIf="profileForm.get('lastName')?.value && profileForm.get('lastName')!.errors">-->
+<!--      Numbers and Special characters not allowed!-->
+<!--    </div>-->
+    <div *ngIf="getControl('lastName')?.errors && getControl('lastName')?.touched">
+      <small class="text-danger" *ngIf="getControl('lastName')?.errors?.['required']">Last name is required</small>
+      <small class="text-danger" *ngIf="getControl('lastName')?.errors?.['maxlength']">Only 25 characters are allowed</small>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="data" for="dob">Date of Birth: </label>
+    <input id="dob" type="date" formControlName="dob" placeholder="DOB" max={{maxDate}} min={{minDate}}>
+  </div>
+
+  <div class="field">
+    <label class="data" for="email">Email: </label>
+    <input id="email" type="email" formControlName="email">
+    <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.errors">
+      Email is invalid!
+    </div>
+  </div>
+
+  <div formArrayName="mobiles" >
+<!--    <h2>Mobile Number</h2>-->
+
+    <div *ngFor="let alias of mobiles.controls; let i=index">
+      <div class="field">
+        <label for="alias-{{ i }}">Mobile:</label>
+          <input id="alias-{{ i }}" type="text" [formControlName]="i" (keypress)="isNumber($event)" minlength="10" maxlength="10">
+        <div *ngIf="alias.invalid">
+          Invalid Mobile number!
+        </div>
+        <div *ngIf="i > 0">
+          <button (click)="deleteMobile(i)">Delete</button>
+        </div>
+      </div>
+
+    </div>
+    <button class="addfield" type="button" (click)="addMobile()">Add mobile</button>
+  </div>
+
+  <div class="">
+    <label class="data">Do you possess an Aadhaar card?</label>
+    <div (change)="changeAd($event.target)">
+      <label>
+        <input type="radio" value="true" formControlName="haveAadhaar"> Yes
+      </label>
+      <label>
+        <input type="radio" value="false" formControlName="haveAadhaar"> No
+      </label>
+    </div>
+  </div>
+
+  <div class="field" *ngIf="profileForm.get('haveAadhaar')?.value === 'true'">
+    <label class="data" for="aadhaar">Aadhaar: </label>
+    <input id="aadhaar" type="text" formControlName="aadhaar" (keypress)="isNumber($event)" minlength="12" maxlength="12">
+    <div *ngIf="profileForm.get('aadhaar')?.errors?.['required']">
+      Aadhaar is required!
+    </div>
+    <div *ngIf="profileForm.get('aadhaar')?.value && profileForm.get('aadhaar')?.errors">
+      Please enter a valid Aadhaar number!
+    </div>
+  </div>
+
+  <div formArrayName="addresses">
+    <div *ngFor="let item of profileForm.controls.addresses?.controls; let i = index;">
+      <div [formGroupName]="i">
+        <h2>Address {{i+1}}</h2>
+
+        <div class="field">
+          <label for="street">Street: </label>
+          <input id="street" type="text" formControlName="street">
+        </div>
+
+
+        <div class="field">
+        <label class="data" for="city">City: </label>
+        <input id="city" type="text" formControlName="city">
+        </div>
+
+        <div class="field">
+          <label class="data" for="state">State: </label>
+          <select id="state" formControlName="state">
+      <!--      <option selected [ngValue]="null">Select State</option>-->
+            <option value="" selected>Select State</option>
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+            <option value="Assam">Assam</option>
+          </select>
+          <div *ngIf="profileForm.get('state')?.invalid && profileForm.get('state')?.errors?.['required']">
+            State is required!
+          </div>
+        </div>
+
+        <div class="field">
+        <label class="data" for="zip">Zip Code: </label>
+        <input id="zip" type="text" formControlName="zip" (keypress)="isNumber($event)" minlength="6" maxlength="6">
+        </div>
+        <div *ngIf="i > 0">
+          <button (click)="deleteAddress(i)">Delete Address</button>
+        </div>
+      </div>
+    </div>
+    <button class="addfield" (click)="addAddress()">
+      Add Address
+    </button>
+  </div>
+
+  <div formArrayName="aliases">
+    <h2>Aliases</h2>
+
+    <div *ngFor="let alias of aliases.controls; let i=index">
+      <div class="field">
+      <label for="alias-{{ i }}">Alias:</label>
+      <input id="alias-{{ i }}" type="text" [formControlName]="i">
+        <div *ngIf="i > 0">
+        <button (click)="deleteAlias(i)">Delete</button>
+        </div>
+      </div>
+
+    </div>
+    <button class="addfield" type="button" (click)="addAlias()">Add alias</button>
+  </div>
+
+
+  <div formArrayName="contact">
+    <div *ngFor="let child of profileForm.controls.contact?.controls; let i = index"
+         formGroupName="{{i}}" class="margin-top">
+      <div class="col-md-2 remove-padding-right">
+        <a (click)="removeContact(i)"><span class="btn btn-sm btn-danger">Remove</span></a>
+      </div>
+    </div>
+    <div class="col-md-12 pt-2">
+      <a class="btn"></a>
+    </div>
+
+  </div>
+
+  <p>Complete the form to enable button.</p>
+
+  <button class="submit" type="submit" (click)="printValue()" [disabled]="!profileForm.valid">Submit</button>
+
+</form>
+
+<p>Form Status: {{ profileForm.status }}</p>
+  <p>{{JSON.stringify(this.profileForm.value)}}</p>
+</div>
